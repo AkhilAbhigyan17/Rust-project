@@ -1,0 +1,48 @@
+# Setup & Troubleshooting Guide for IAM Platform on Windows
+
+To run the project locally on your machine, we need to resolve two issues:
+1. **Missing C++ Linker (`link.exe`)**: Rust on Windows requires the Microsoft C++ Build Tools to compile dependencies.
+2. **Missing Database (PostgreSQL)**: The application requires a PostgreSQL instance running on port 5432.
+
+Here is how you can install both dependencies quickly using Windows Package Manager (`winget`).
+
+---
+
+### Step 1: Install MSVC Build Tools & C++ Linker
+Open **PowerShell as Administrator** and run the following command to install the Visual Studio 2022 Build Tools with the C++ workload:
+```powershell
+winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended --passive --norestart"
+```
+*Note: This command will run the installer silently in the background. It will take a few minutes to download and configure the tools.*
+
+---
+
+### Step 2: Install PostgreSQL
+In the same Administrator PowerShell window, run the following command to install PostgreSQL:
+```powershell
+winget install PostgreSQL.PostgreSQL
+```
+Once the PostgreSQL installation finishes:
+1. Make sure the PostgreSQL database is running as a service.
+2. The default superuser username is `postgres`. Make sure you create a database and user matching the credentials in your `.env` file:
+   - **Database Name**: `iam`
+   - **User**: `iam`
+   - **Password**: `iam_secret`
+   
+Alternatively, you can modify the `DATABASE_URL` in your `.env` file to match your local PostgreSQL superuser credentials, e.g.:
+```env
+DATABASE_URL=postgres://postgres:your_password@localhost:5432/iam
+```
+
+---
+
+### Step 3: Run the Project
+Once the installation of MSVC Build Tools and PostgreSQL is complete, open a **fresh** PowerShell terminal (so the new PATH environment variables are loaded), navigate to the project directory, and run our helper script:
+```powershell
+.\run.ps1
+```
+This script will automatically:
+1. Add Cargo to your session PATH.
+2. Verify your Rust toolchain.
+3. Validate that PostgreSQL is listening on port 5432.
+4. Compile and start the project using `cargo run`.

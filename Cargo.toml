@@ -1,0 +1,65 @@
+[package]
+name = "iam-platform"
+version = "0.1.0"
+edition = "2021"
+authors = ["IAM Platform Team"]
+description = "Production-ready Identity & Access Management backend"
+license = "MIT"
+
+[dependencies]
+axum = { version = "0.7", features = ["macros", "tokio", "http1", "http2"] }
+tokio = { version = "1.40", features = ["full"] }
+tower = { version = "0.5", features = ["full"] }
+tower-http = { version = "0.6", features = ["cors", "trace", "request-id", "util", "limit"] }
+hyper = { version = "1.4", features = ["full"] }
+
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono", "json", "migrate"] }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+jsonwebtoken = "9.3"
+argon2 = "0.5"
+rand = "0.8"
+rand_core = { version = "0.6", features = ["std"] }
+sha2 = "0.10"
+base64 = "0.22"
+hex = "0.4"
+
+uuid = { version = "1.10", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+thiserror = "1.0"
+anyhow = "1.0"
+
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+dotenvy = "0.15"
+config = "0.14"
+
+validator = { version = "0.18", features = ["derive"] }
+regex = "1.10"
+lazy_static = "1.5"
+
+utoipa = { version = "5.0", features = ["axum_extras", "uuid", "chrono"] }
+utoipa-swagger-ui = { version = "8.0", features = ["axum"] }
+
+async-trait = "0.1"
+futures = "0.3"
+
+governor = "0.7"
+nonzero_ext = "0.3"
+
+lettre = { version = "0.11", default-features = false, features = ["tokio1-rustls-tls", "smtp-transport", "builder"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockall = "0.13"
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
